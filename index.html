@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    .font-display { font-family: 'Great Vibes', cursive; }
+    .font-heading { font-family: 'Cormorant Garamond', serif; }
+    .font-body { font-family: 'Lora', serif; }
+    
+    /* Cover Background - Dark Elegant Floral */
+    .cover-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cover-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    /* Inner Background - Soft Cream Elegant */
+    .inner-bg {
+      background: linear-gradient(180deg, #fdf8f3 0%, #f5ebe0 50%, #fdf8f3 100%);
+      position: relative;
+    }
+    
+    .inner-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(139, 90, 43, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(139, 90, 43, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    /* Decorative Elements */
+    .gold-ornament {
+      color: #d4af37;
+    }
+    
+    .ornament-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in-up {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+    
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .animate-sparkle {
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    .animate-slide-down {
+      animation: slideDown 0.8s ease-out forwards;
+    }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+    .delay-700 { animation-delay: 0.7s; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f5ebe0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4af37;
+      border-radius: 3px;
+    }
+    
+    /* Floating Petals */
+    .petal {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.6) 0%, rgba(212, 175, 55, 0.1) 70%, transparent 100%);
+      border-radius: 50% 0 50% 50%;
+      pointer-events: none;
+    }
+    
+    @keyframes fall {
+      0% {
+        transform: translateY(-10%) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110%) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Section styling */
+    .section-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    
+    /* Button styling */
+    .btn-gold {
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+      color: #1a1a2e;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+    }
+    
+    /* Timeline */
+    .timeline-dot {
+      width: 16px;
+      height: 16px;
+      background: #d4af37;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+    }
+    
+    /* Countdown boxes */
+    .countdown-box {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    
+    /* Gallery */
+    .gallery-frame {
+      border: 3px solid #d4af37;
+      background: linear-gradient(135deg, #f5ebe0, #fdf8f3);
+      padding: 8px;
+    }
+    
+    /* Music toggle */
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      transition: transform 0.3s ease;
+    }
+    
+    .music-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    /* Hide elements initially for animation */
+    .hidden-initially {
+      opacity: 0;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto">
+   <!-- COVER PAGE -->
+   <section id="cover" class="cover-bg min-h-full w-full flex flex-col items-center justify-center relative px-4 py-12">
+    <!-- Floating sparkles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+     <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-yellow-300 rounded-full animate-sparkle"></div>
+     <div class="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-sparkle delay-300"></div>
+     <div class="absolute top-1/2 left-1/3 w-2 h-2 bg-yellow-300 rounded-full animate-sparkle delay-500"></div>
+     <div class="absolute bottom-1/3 right-1/3 w-1.5 h-1.5 bg-yellow-200 rounded-full animate-sparkle delay-200"></div>
+     <div class="absolute bottom-1/4 left-1/5 w-2 h-2 bg-yellow-300 rounded-full animate-sparkle delay-400"></div>
+    </div><!-- Top Ornament -->
+    <div class="gold-ornament text-4xl md:text-5xl animate-fade-in mb-4">
+     ✦
+    </div><!-- Wedding Invitation Text -->
+    <p class="text-yellow-200/80 text-sm md:text-base tracking-[0.3em] uppercase animate-fade-in-up font-heading">The Wedding Of</p><!-- Couple Names -->
+    <div class="text-center my-8 animate-fade-in-up delay-200">
+     <h1 id="cover-groom" class="font-display text-5xl md:text-7xl lg:text-8xl gold-ornament leading-tight">Ahmad</h1>
+     <div class="flex items-center justify-center my-4 gap-4">
+      <div class="w-16 md:w-24 ornament-line"></div><span class="font-display text-3xl md:text-4xl gold-ornament">&amp;</span>
+      <div class="w-16 md:w-24 ornament-line"></div>
+     </div>
+     <h1 id="cover-bride" class="font-display text-5xl md:text-7xl lg:text-8xl gold-ornament leading-tight">Fatimah</h1>
+    </div><!-- Date -->
+    <div class="text-center animate-fade-in-up delay-400">
+     <p class="text-yellow-100/60 font-heading text-lg md:text-xl tracking-wider">Sabtu, 15 Februari 2025</p>
+    </div><!-- Invitation for -->
+    <div class="mt-12 text-center animate-fade-in-up delay-500">
+     <p class="text-yellow-100/50 text-sm tracking-wider mb-2">Kepada Yth.</p>
+     <p class="text-yellow-100 font-heading text-xl md:text-2xl">Bapak/Ibu/Saudara/i</p>
+     <p class="text-yellow-200 font-heading text-2xl md:text-3xl mt-1 font-semibold">Tamu Undangan</p>
+    </div><!-- Open Invitation Button --> <button id="openBtn" onclick="openInvitation()" class="mt-12 btn-gold px-8 py-4 rounded-full font-heading text-lg tracking-wider flex items-center gap-3 animate-fade-in-up delay-600 animate-float">
+     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+     </svg> Buka Undangan </button> <!-- Bottom Ornament -->
+    <div class="gold-ornament text-4xl md:text-5xl animate-fade-in mt-8">
+     ✦
+    </div><!-- Scroll indicator -->
+    <div class="absolute bottom-8 animate-bounce gold-ornament">
+     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+     </svg>
+    </div>
+   </section><!-- MAIN INVITATION CONTENT -->
+   <div id="mainContent" class="hidden">
+    <!-- Opening Section -->
+    <section class="inner-bg min-h-full w-full py-16 px-4 relative">
+     <div class="max-w-2xl mx-auto text-center">
+      <!-- Bismillah -->
+      <div class="hidden-initially animate-slide-down">
+       <p class="font-heading text-2xl md:text-3xl text-amber-800 mb-2">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+       <p class="text-amber-700/70 text-sm mb-8">Bismillahirrahmanirrahim</p>
+      </div><!-- Ayat -->
+      <div class="section-card rounded-2xl p-6 md:p-8 mb-8 hidden-initially animate-fade-in-up delay-200">
+       <p id="opening-quote" class="font-heading text-amber-800 text-base md:text-lg leading-relaxed italic">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</p>
+       <p class="text-amber-600 mt-4 font-heading text-sm">(QS. Ar-Rum: 21)</p>
+      </div><!-- Assalamualaikum -->
+      <div class="hidden-initially animate-fade-in-up delay-300">
+       <p class="font-heading text-xl md:text-2xl text-amber-800 mb-4">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+       <p class="text-amber-700/80 leading-relaxed">Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan acara pernikahan putra-putri kami:</p>
+      </div>
+     </div>
+    </section><!-- Couple Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+       <!-- Groom -->
+       <div class="text-center hidden-initially animate-fade-in-up">
+        <div class="w-48 h-48 md:w-56 md:h-56 mx-auto mb-6 rounded-full overflow-hidden gallery-frame">
+         <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+          <svg class="w-24 h-24 text-amber-400" fill="currentColor" viewbox="0 0 24 24">
+           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+         </div>
+        </div>
+        <h2 id="groom-name" class="font-display text-4xl md:text-5xl gold-ornament mb-2">Ahmad Rizky</h2>
+        <p class="font-heading text-amber-800 text-lg">Putra dari</p>
+        <p class="text-amber-700">Bapak Ahmad &amp; Ibu Siti</p>
+       </div><!-- Ampersand -->
+       <div class="hidden-initially animate-fade-in-up delay-200">
+        <span class="font-display text-6xl md:text-7xl gold-ornament">&amp;</span>
+       </div><!-- Bride -->
+       <div class="text-center hidden-initially animate-fade-in-up delay-300">
+        <div class="w-48 h-48 md:w-56 md:h-56 mx-auto mb-6 rounded-full overflow-hidden gallery-frame">
+         <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+          <svg class="w-24 h-24 text-amber-400" fill="currentColor" viewbox="0 0 24 24">
+           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+         </div>
+        </div>
+        <h2 id="bride-name" class="font-display text-4xl md:text-5xl gold-ornament mb-2">Fatimah Azzahra</h2>
+        <p class="font-heading text-amber-800 text-lg">Putri dari</p>
+        <p class="text-amber-700">Bapak Ibrahim &amp; Ibu Khadijah</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- Event Details Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-3xl mx-auto">
+      <!-- Section Title -->
+      <div class="text-center mb-12 hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Waktu &amp; Tempat</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">Acara Pernikahan</h2>
+       <div class="w-32 ornament-line mx-auto mt-4"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+       <!-- Akad Nikah -->
+       <div class="section-card rounded-2xl p-6 md:p-8 text-center hidden-initially animate-fade-in-up">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 flex items-center justify-center">
+         <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+         </svg>
+        </div>
+        <h3 class="font-heading text-2xl text-amber-800 mb-4">Akad Nikah</h3>
+        <div class="space-y-2 text-amber-700">
+         <p id="akad-date" class="font-semibold">Sabtu, 15 Februari 2025</p>
+         <p id="akad-time">Pukul 08:00 - 10:00 WIB</p>
+        </div>
+       </div><!-- Resepsi -->
+       <div class="section-card rounded-2xl p-6 md:p-8 text-center hidden-initially animate-fade-in-up delay-200">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 flex items-center justify-center">
+         <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+         </svg>
+        </div>
+        <h3 class="font-heading text-2xl text-amber-800 mb-4">Resepsi</h3>
+        <div class="space-y-2 text-amber-700">
+         <p id="resepsi-date" class="font-semibold">Sabtu, 15 Februari 2025</p>
+         <p id="resepsi-time">Pukul 11:00 - 14:00 WIB</p>
+        </div>
+       </div>
+      </div><!-- Venue -->
+      <div class="section-card rounded-2xl p-6 md:p-8 text-center mt-6 hidden-initially animate-fade-in-up delay-300">
+       <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-200 to-amber-300 flex items-center justify-center">
+        <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+       </div>
+       <h3 class="font-heading text-2xl text-amber-800 mb-2">Lokasi Acara</h3>
+       <p id="venue-name" class="text-amber-800 font-semibold text-lg">Gedung Serbaguna Bahagia</p>
+       <p id="venue-address" class="text-amber-700 mb-4">Jl. Kebahagiaan No. 123, Jakarta Selatan</p><a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 btn-gold px-6 py-3 rounded-full font-heading">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg> Lihat Peta </a>
+      </div>
+     </div>
+    </section><!-- Countdown Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-2xl mx-auto text-center">
+      <div class="hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Menghitung Hari</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament mb-8">Menuju Hari Bahagia</h2>
+      </div>
+      <div id="countdown" class="flex justify-center gap-3 md:gap-6 flex-wrap hidden-initially animate-fade-in-up delay-200">
+       <div class="countdown-box rounded-xl p-4 md:p-6 min-w-[70px] md:min-w-[90px]">
+        <span id="days" class="font-display text-3xl md:text-5xl gold-ornament">00</span>
+        <p class="text-yellow-100/70 text-xs md:text-sm mt-1 font-heading">Hari</p>
+       </div>
+       <div class="countdown-box rounded-xl p-4 md:p-6 min-w-[70px] md:min-w-[90px]">
+        <span id="hours" class="font-display text-3xl md:text-5xl gold-ornament">00</span>
+        <p class="text-yellow-100/70 text-xs md:text-sm mt-1 font-heading">Jam</p>
+       </div>
+       <div class="countdown-box rounded-xl p-4 md:p-6 min-w-[70px] md:min-w-[90px]">
+        <span id="minutes" class="font-display text-3xl md:text-5xl gold-ornament">00</span>
+        <p class="text-yellow-100/70 text-xs md:text-sm mt-1 font-heading">Menit</p>
+       </div>
+       <div class="countdown-box rounded-xl p-4 md:p-6 min-w-[70px] md:min-w-[90px]">
+        <span id="seconds" class="font-display text-3xl md:text-5xl gold-ornament">00</span>
+        <p class="text-yellow-100/70 text-xs md:text-sm mt-1 font-heading">Detik</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- Love Story Timeline -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-12 hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Perjalanan Cinta</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">Love Story</h2>
+       <div class="w-32 ornament-line mx-auto mt-4"></div>
+      </div>
+      <div class="relative">
+       <!-- Timeline Line -->
+       <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-300 transform md:-translate-x-1/2"></div><!-- Timeline Items -->
+       <div class="space-y-8">
+        <!-- Item 1 -->
+        <div class="relative flex items-start gap-6 md:gap-0 hidden-initially animate-fade-in-up">
+         <div class="timeline-dot rounded-full z-10 flex-shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2"></div>
+         <div class="md:w-1/2 md:pr-12 md:text-right">
+          <div class="section-card rounded-xl p-4">
+           <p class="text-amber-600 text-sm font-heading">2020</p>
+           <h3 class="font-heading text-lg text-amber-800 mb-1">Pertama Bertemu</h3>
+           <p class="text-amber-700 text-sm">Kami pertama kali bertemu di acara seminar kampus.</p>
+          </div>
+         </div>
+        </div><!-- Item 2 -->
+        <div class="relative flex items-start gap-6 md:gap-0 hidden-initially animate-fade-in-up delay-100">
+         <div class="timeline-dot rounded-full z-10 flex-shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2"></div>
+         <div class="md:w-1/2 md:ml-auto md:pl-12">
+          <div class="section-card rounded-xl p-4">
+           <p class="text-amber-600 text-sm font-heading">2021</p>
+           <h3 class="font-heading text-lg text-amber-800 mb-1">Menjalin Hubungan</h3>
+           <p class="text-amber-700 text-sm">Resmi menjalin hubungan setelah setahun berteman.</p>
+          </div>
+         </div>
+        </div><!-- Item 3 -->
+        <div class="relative flex items-start gap-6 md:gap-0 hidden-initially animate-fade-in-up delay-200">
+         <div class="timeline-dot rounded-full z-10 flex-shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2"></div>
+         <div class="md:w-1/2 md:pr-12 md:text-right">
+          <div class="section-card rounded-xl p-4">
+           <p class="text-amber-600 text-sm font-heading">2024</p>
+           <h3 class="font-heading text-lg text-amber-800 mb-1">Lamaran</h3>
+           <p class="text-amber-700 text-sm">Melamar dengan restu kedua orang tua.</p>
+          </div>
+         </div>
+        </div><!-- Item 4 -->
+        <div class="relative flex items-start gap-6 md:gap-0 hidden-initially animate-fade-in-up delay-300">
+         <div class="timeline-dot rounded-full z-10 flex-shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2"></div>
+         <div class="md:w-1/2 md:ml-auto md:pl-12">
+          <div class="section-card rounded-xl p-4">
+           <p class="text-amber-600 text-sm font-heading">2025</p>
+           <h3 class="font-heading text-lg text-amber-800 mb-1">Hari Bahagia</h3>
+           <p class="text-amber-700 text-sm">Menikah dan memulai kehidupan baru bersama.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Gallery Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Galeri Foto</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">Momen Bahagia</h2>
+       <div class="w-32 ornament-line mx-auto mt-4"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 hidden-initially animate-fade-in-up delay-200">
+       <!-- Gallery placeholders -->
+       <div class="gallery-frame rounded-lg aspect-square">
+        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center rounded">
+         <svg class="w-12 h-12 text-amber-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg>
+        </div>
+       </div>
+       <div class="gallery-frame rounded-lg aspect-square">
+        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center rounded">
+         <svg class="w-12 h-12 text-amber-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg>
+        </div>
+       </div>
+       <div class="gallery-frame rounded-lg aspect-square">
+        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center rounded">
+         <svg class="w-12 h-12 text-amber-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg>
+        </div>
+       </div>
+       <div class="gallery-frame rounded-lg aspect-square md:col-span-2">
+        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center rounded">
+         <svg class="w-16 h-16 text-amber-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg>
+        </div>
+       </div>
+       <div class="gallery-frame rounded-lg aspect-square">
+        <div class="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center rounded">
+         <svg class="w-12 h-12 text-amber-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Dashboard Statistics Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Statistik Tamu</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">Dashboard Kehadiran</h2>
+       <div class="w-32 ornament-line mx-auto mt-4"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden-initially animate-fade-in-up delay-200">
+       <!-- Total Guests Card -->
+       <div class="section-card rounded-2xl p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10h1.5M9 20H4v-2a6 6 0 0112 0v2H9m0 0h6m-6 0a6 6 0 100-12 6 6 0 000 12z" />
+         </svg>
+        </div>
+        <p class="text-amber-600 text-sm font-heading mb-1">Total Tamu</p>
+        <p id="stat-total" class="font-display text-3xl gold-ornament">0</p>
+       </div><!-- Confirmed Card -->
+       <div class="section-card rounded-2xl p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         </svg>
+        </div>
+        <p class="text-amber-600 text-sm font-heading mb-1">Hadir</p>
+        <p id="stat-confirmed" class="font-display text-3xl text-green-600">0</p>
+       </div><!-- Not Confirmed Card -->
+       <div class="section-card rounded-2xl p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+         </svg>
+        </div>
+        <p class="text-amber-600 text-sm font-heading mb-1">Tidak Hadir</p>
+        <p id="stat-not-confirmed" class="font-display text-3xl text-red-600">0</p>
+       </div><!-- Total Persons Card -->
+       <div class="section-card rounded-2xl p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z" />
+         </svg>
+        </div>
+        <p class="text-amber-600 text-sm font-heading mb-1">Total Orang</p>
+        <p id="stat-persons" class="font-display text-3xl text-purple-600">0</p>
+       </div>
+      </div><!-- Progress Bar -->
+      <div class="section-card rounded-2xl p-6 mt-6 hidden-initially animate-fade-in-up delay-300">
+       <p class="text-amber-800 font-heading mb-3">Progress Konfirmasi</p>
+       <div class="w-full bg-amber-100 rounded-full h-4 overflow-hidden">
+        <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-green-600 h-full transition-all duration-500" style="width: 0%"></div>
+       </div>
+       <p class="text-amber-600 text-sm mt-2 text-center"><span id="progress-percent">0</span>% telah mengkonfirmasi</p>
+      </div>
+     </div>
+    </section><!-- RSVP Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-xl mx-auto">
+      <div class="text-center mb-8 hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Konfirmasi Kehadiran</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">RSVP</h2>
+       <div class="w-32 ornament-line mx-auto mt-4"></div>
+      </div>
+      <form id="rsvpForm" class="section-card rounded-2xl p-6 md:p-8 hidden-initially animate-fade-in-up delay-200">
+       <div class="space-y-4">
+        <div>
+         <label for="rsvp-name" class="block text-amber-800 font-heading mb-2">Nama Lengkap</label> <input type="text" id="rsvp-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-3 rounded-lg border border-amber-200 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white/50 text-amber-900 placeholder-amber-400">
+        </div>
+        <div>
+         <label class="block text-amber-800 font-heading mb-2">Konfirmasi Kehadiran</label>
+         <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="attendance" value="hadir" class="w-4 h-4 text-amber-600 focus:ring-amber-400"> <span class="text-amber-700">Hadir</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="attendance" value="tidak" class="w-4 h-4 text-amber-600 focus:ring-amber-400"> <span class="text-amber-700">Tidak Hadir</span> </label>
+         </div>
+        </div>
+        <div>
+         <label for="rsvp-guests" class="block text-amber-800 font-heading mb-2">Jumlah Tamu</label> <select id="rsvp-guests" class="w-full px-4 py-3 rounded-lg border border-amber-200 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white/50 text-amber-900"> <option value="1">1 Orang</option> <option value="2">2 Orang</option> <option value="3">3 Orang</option> <option value="4">4 Orang</option> </select>
+        </div>
+        <div>
+         <label for="rsvp-message" class="block text-amber-800 font-heading mb-2">Ucapan &amp; Doa</label> <textarea id="rsvp-message" rows="3" placeholder="Tuliskan ucapan dan doa untuk kedua mempelai..." class="w-full px-4 py-3 rounded-lg border border-amber-200 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white/50 text-amber-900 placeholder-amber-400 resize-none"></textarea>
+        </div><button type="submit" class="w-full btn-gold py-3 rounded-lg font-heading text-lg tracking-wider"> Kirim Konfirmasi </button>
+       </div>
+      </form><!-- Success Message -->
+      <div id="rsvpSuccess" class="hidden section-card rounded-2xl p-6 md:p-8 text-center">
+       <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+       </div>
+       <h3 class="font-heading text-xl text-amber-800 mb-2">Terima Kasih!</h3>
+       <p class="text-amber-700">Konfirmasi kehadiran Anda telah kami terima.</p>
+      </div>
+     </div>
+    </section><!-- Gift/Amplop Section -->
+    <section class="inner-bg w-full py-16 px-4 relative">
+     <div class="max-w-xl mx-auto text-center">
+      <div class="hidden-initially animate-fade-in">
+       <p class="text-amber-600 tracking-[0.3em] uppercase text-sm mb-2">Hadiah Pernikahan</p>
+       <h2 class="font-display text-4xl md:text-5xl gold-ornament">Amplop Digital</h2>
+       <div class="w-32 ornament-line mx-auto mt-4 mb-8"></div>
+      </div>
+      <p class="text-amber-700 mb-8 hidden-initially animate-fade-in-up">Doa restu dari Bapak/Ibu/Saudara/i sudah lebih dari cukup bagi kami. Namun jika ingin memberikan tanda kasih, dapat melalui:</p>
+      <div class="grid md:grid-cols-2 gap-4 hidden-initially animate-fade-in-up delay-200">
+       <!-- Bank 1 -->
+       <div class="section-card rounded-xl p-6">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+         </svg>
+        </div>
+        <p class="font-heading text-amber-800 font-semibold">Bank BCA</p>
+        <p class="text-amber-700 text-lg font-mono my-2">1234567890</p>
+        <p class="text-amber-600 text-sm">a.n. Ahmad Rizky</p><button onclick="copyToClipboard('1234567890')" class="mt-3 text-sm text-amber-600 hover:text-amber-800 flex items-center justify-center gap-1 mx-auto">
+         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+         </svg> Salin Nomor </button>
+       </div><!-- Bank 2 -->
+       <div class="section-card rounded-xl p-6">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+         <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+         </svg>
+        </div>
+        <p class="font-heading text-amber-800 font-semibold">Bank Mandiri</p>
+        <p class="text-amber-700 text-lg font-mono my-2">0987654321</p>
+        <p class="text-amber-600 text-sm">a.n. Fatimah Azzahra</p><button onclick="copyToClipboard('0987654321')" class="mt-3 text-sm text-amber-600 hover:text-amber-800 flex items-center justify-center gap-1 mx-auto">
+         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+         </svg> Salin Nomor </button>
+       </div>
+      </div><!-- Copy Toast -->
+      <div id="copyToast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-amber-800 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none">
+       Nomor rekening berhasil disalin!
+      </div>
+     </div>
+    </section><!-- Closing Section -->
+    <section class="cover-bg w-full py-16 px-4 relative">
+     <div class="max-w-2xl mx-auto text-center">
+      <div class="gold-ornament text-4xl mb-6">
+       ✦
+      </div>
+      <p class="text-yellow-100/80 font-heading text-lg md:text-xl leading-relaxed mb-8">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.</p>
+      <p class="text-yellow-100/60 mb-4">Atas kehadiran dan doa restunya, kami ucapkan</p>
+      <h2 class="font-display text-4xl md:text-5xl gold-ornament mb-6">Terima Kasih</h2>
+      <p class="text-yellow-100/80 font-heading text-xl mb-8">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+      <div class="flex items-center justify-center gap-4 mb-8">
+       <div class="w-16 md:w-24 ornament-line"></div><span class="font-display text-2xl gold-ornament">♥</span>
+       <div class="w-16 md:w-24 ornament-line"></div>
+      </div><!-- Couple Names -->
+      <p class="font-display text-3xl md:text-4xl gold-ornament"><span id="closing-groom">Ahmad</span> &amp; <span id="closing-bride">Fatimah</span></p>
+      <div class="gold-ornament text-4xl mt-8">
+       ✦
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="bg-amber-900 text-amber-100/60 py-6 px-4 text-center">
+     <p class="text-sm">Made with ♥ for Ahmad &amp; Fatimah</p>
+     <p class="text-xs mt-2">© 2025 Wedding Invitation</p>
+    </footer>
+   </div>
+  </div>
+  <script>
