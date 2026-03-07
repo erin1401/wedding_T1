@@ -695,74 +695,43 @@
       secondary_action_color: '#f4d03f'
     };
   
- //google sheet
-   let allRsvpData = [];
+ /// Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        allRsvpData = data;
+        updateStatistics();
+      }
+    };
 
-async function loadRsvpData(){
+    // Update Statistics
+    function updateStatistics() {
+      const total = allRsvpData.length;
+      const confirmed = allRsvpData.filter(item => item.attendance === 'hadir').length;
+      const notConfirmed = allRsvpData.filter(item => item.attendance === 'tidak').length;
+      const totalPersons = allRsvpData.reduce((sum, item) => sum + parseInt(item.guests || 1), 0);
+      
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-confirmed').textContent = confirmed;
+      document.getElementById('stat-not-confirmed').textContent = notConfirmed;
+      document.getElementById('stat-persons').textContent = totalPersons;
+      
+      // Update progress bar
+      const confirmationRate = total > 0 ? Math.round((confirmed / total) * 100) : 0;
+      document.getElementById('progress-bar').style.width = confirmationRate + '%';
+      document.getElementById('progress-percent').textContent = confirmationRate;
+    }
 
-  try{
+    // Initialize Data SDK
+    async function initDataSDK() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+    }
 
-    const response = await fetch("https://script.google.com/macros/s/AKfycbyKeDlAdThNmz4m-c-xJQ7dzk4L2Q55J7VdvvOY2JP9yGaISaR5VYxhO2vRoRrQLcguuQ/exec");
-
-    const text = await response.text();
-
-    const data = JSON.parse(text);
-
-    allRsvpData = data;
-
-    updateStatistics();
-
-  }catch(e){
-
-    console.log("error load rsvp", e);
-
-  }
-
-}
-
-   //Statistik
-   function updateStatistics() {
-
-  if (!allRsvpData || allRsvpData.length === 0) return;
-
-  const total = allRsvpData.length;
-
-  const confirmed = allRsvpData.filter(item =>
-    (item.attendance || "").toLowerCase() === "hadir"
-  ).length;
-
-  const notConfirmed = allRsvpData.filter(item =>
-    (item.attendance || "").toLowerCase() === "tidak"
-  ).length;
-
-  const totalPersons = allRsvpData.reduce((sum,item)=>{
-
-    const guests = parseInt(item.guests);
-
-    return sum + (isNaN(guests) ? 1 : guests);
-
-  },0);
-
-  document.getElementById("stat-total").textContent = total;
-  document.getElementById("stat-confirmed").textContent = confirmed;
-  document.getElementById("stat-not-confirmed").textContent = notConfirmed;
-  document.getElementById("stat-persons").textContent = totalPersons;
-
-  const confirmationRate = total > 0
-      ? Math.round((confirmed / total) * 100)
-      : 0;
-
-  document.getElementById("progress-bar").style.width = confirmationRate + "%";
-  document.getElementById("progress-percent").textContent = confirmationRate;
-
-}
-   document.addEventListener("DOMContentLoaded", function(){
-
-  loadRsvpData();
-
-  setInterval(loadRsvpData,10000);
-
-});
+    initDataSDK();
 
     // Initialize Elements SDK
     if (window.elementSdk) {
