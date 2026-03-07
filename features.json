@@ -1,0 +1,277 @@
+// Data management
+    let allRsvpData = [];
+    let isSubmitting = false;
+
+    // Default configuration
+    const defaultConfig = {
+      groom_name: 'Ahmad Rizky',
+      bride_name: 'Fatimah Azzahra',
+      akad_date: 'Sabtu, 15 Februari 2025',
+      akad_time: 'Pukul 08:00 - 10:00 WIB',
+      resepsi_date: 'Sabtu, 15 Februari 2025',
+      resepsi_time: 'Pukul 11:00 - 14:00 WIB',
+      venue_name: 'Gedung Serbaguna Bahagia',
+      venue_address: 'Jl. Kebahagiaan No. 123, Jakarta Selatan',
+      opening_quote: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."',
+      background_color: '#1a1a2e',
+      surface_color: '#fdf8f3',
+      text_color: '#92400e',
+      primary_action_color: '#d4af37',
+      secondary_action_color: '#f4d03f'
+    };
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        allRsvpData = data;
+        updateStatistics();
+      }
+    };
+
+    // Update Statistics
+    function updateStatistics() {
+      const total = allRsvpData.length;
+      const confirmed = allRsvpData.filter(item => item.attendance === 'hadir').length;
+      const notConfirmed = allRsvpData.filter(item => item.attendance === 'tidak').length;
+      const totalPersons = allRsvpData.reduce((sum, item) => sum + parseInt(item.guests || 1), 0);
+      
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-confirmed').textContent = confirmed;
+      document.getElementById('stat-not-confirmed').textContent = notConfirmed;
+      document.getElementById('stat-persons').textContent = totalPersons;
+      
+      // Update progress bar
+      const confirmationRate = total > 0 ? Math.round((confirmed / total) * 100) : 0;
+      document.getElementById('progress-bar').style.width = confirmationRate + '%';
+      document.getElementById('progress-percent').textContent = confirmationRate;
+    }
+
+    // Initialize Data SDK
+    async function initDataSDK() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+    }
+
+    initDataSDK();
+
+    // Initialize Elements SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          // Update cover names
+          const groomFirst = (config.groom_name || defaultConfig.groom_name).split(' ')[0];
+          const brideFirst = (config.bride_name || defaultConfig.bride_name).split(' ')[0];
+          
+          document.getElementById('cover-groom').textContent = groomFirst;
+          document.getElementById('cover-bride').textContent = brideFirst;
+          
+          // Update main content names
+          document.getElementById('groom-name').textContent = config.groom_name || defaultConfig.groom_name;
+          document.getElementById('bride-name').textContent = config.bride_name || defaultConfig.bride_name;
+          
+          // Update closing names
+          document.getElementById('closing-groom').textContent = groomFirst;
+          document.getElementById('closing-bride').textContent = brideFirst;
+          
+          // Update event details
+          document.getElementById('akad-date').textContent = config.akad_date || defaultConfig.akad_date;
+          document.getElementById('akad-time').textContent = config.akad_time || defaultConfig.akad_time;
+          document.getElementById('resepsi-date').textContent = config.resepsi_date || defaultConfig.resepsi_date;
+          document.getElementById('resepsi-time').textContent = config.resepsi_time || defaultConfig.resepsi_time;
+          
+          // Update venue
+          document.getElementById('venue-name').textContent = config.venue_name || defaultConfig.venue_name;
+          document.getElementById('venue-address').textContent = config.venue_address || defaultConfig.venue_address;
+          
+          // Update opening quote
+          document.getElementById('opening-quote').textContent = config.opening_quote || defaultConfig.opening_quote;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => window.elementSdk.setConfig({ background_color: value })
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => window.elementSdk.setConfig({ surface_color: value })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => window.elementSdk.setConfig({ text_color: value })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => window.elementSdk.setConfig({ primary_action_color: value })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_action_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['groom_name', config.groom_name || defaultConfig.groom_name],
+          ['bride_name', config.bride_name || defaultConfig.bride_name],
+          ['akad_date', config.akad_date || defaultConfig.akad_date],
+          ['akad_time', config.akad_time || defaultConfig.akad_time],
+          ['resepsi_date', config.resepsi_date || defaultConfig.resepsi_date],
+          ['resepsi_time', config.resepsi_time || defaultConfig.resepsi_time],
+          ['venue_name', config.venue_name || defaultConfig.venue_name],
+          ['venue_address', config.venue_address || defaultConfig.venue_address],
+          ['opening_quote', config.opening_quote || defaultConfig.opening_quote]
+        ])
+      });
+    }
+
+    // Wedding date for countdown
+    const weddingDate = new Date('2025-02-15T08:00:00').getTime();
+
+    // Open invitation function
+    function openInvitation() {
+      const cover = document.getElementById('cover');
+      const mainContent = document.getElementById('mainContent');
+      
+      cover.style.display = 'none';
+      mainContent.classList.remove('hidden');
+      
+      // Trigger animations for visible elements
+      setTimeout(() => {
+        const hiddenElements = mainContent.querySelectorAll('.hidden-initially');
+        hiddenElements.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.remove('hidden-initially');
+            el.style.opacity = '1';
+          }, index * 100);
+        });
+      }, 100);
+      
+      // Scroll to top of main content
+      document.getElementById('app').scrollTop = 0;
+    }
+
+    // Countdown timer
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+      
+      if (distance > 0) {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      } else {
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+      }
+    }
+
+    // Copy to clipboard function
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copyToast');
+        toast.style.opacity = '1';
+        setTimeout(() => {
+          toast.style.opacity = '0';
+        }, 2000);
+      });
+    }
+
+    // RSVP form submission
+    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (isSubmitting) return;
+      isSubmitting = true;
+      
+      const nameInput = document.getElementById('rsvp-name');
+      const attendanceInput = document.querySelector('input[name="attendance"]:checked');
+      const guestsInput = document.getElementById('rsvp-guests');
+      const messageInput = document.getElementById('rsvp-message');
+      
+      // Validation
+      if (!nameInput.value.trim() || !attendanceInput) {
+        alert('Mohon isi nama dan konfirmasi kehadiran');
+        isSubmitting = false;
+        return;
+      }
+      
+      const rsvpData = {
+        name: nameInput.value.trim(),
+        attendance: attendanceInput.value,
+        guests: guestsInput.value,
+        message: messageInput.value.trim(),
+        submitted_at: new Date().toISOString()
+      };
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Mengirim...';
+      submitBtn.disabled = true;
+      
+      const result = await window.dataSdk.create(rsvpData);
+      
+      if (result.isOk) {
+        const form = document.getElementById('rsvpForm');
+        const success = document.getElementById('rsvpSuccess');
+        
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        
+        // Reset form after success
+        form.reset();
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      } else {
+        alert('Gagal mengirim konfirmasi. Silakan coba lagi.');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        isSubmitting = false;
+      }
+    });
+
+    // Initialize countdown
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('hidden-initially');
+          entry.target.style.opacity = '1';
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements after main content is shown
+    document.getElementById('openBtn').addEventListener('click', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.hidden-initially').forEach(el => {
+          observer.observe(el);
+        });
+      }, 500);
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d8747b823d3ea82',t:'MTc3Mjg2MjE4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
