@@ -703,22 +703,7 @@
       }
     };
 
-   let allRsvpData = [];
-
-async function loadRsvpData() {
-
-  const res = await fetch("https://script.google.com/macros/s/AKfycbyKeDlAdThNmz4m-c-xJQ7dzk4L2Q55J7VdvvOY2JP9yGaISaR5VYxhO2vRoRrQLcguuQ/exec");
-  
-  const data = await res.json();
-
-  allRsvpData = data;
-
-  updateStatistics();
-}
-
-loadRsvpData();
-
-    // Update Statistics
+   // Update Statistics
     function updateStatistics() {
       const total = allRsvpData.length;
       const confirmed = allRsvpData.filter(item => item.attendance === 'hadir').length;
@@ -729,38 +714,7 @@ loadRsvpData();
       document.getElementById('stat-confirmed').textContent = confirmed;
       document.getElementById('stat-not-confirmed').textContent = notConfirmed;
       document.getElementById('stat-persons').textContent = totalPersons;
-
-     function updateStatistics() {
-
-  const total = allRsvpData.length;
-
-  const confirmed = allRsvpData.filter(
-    item => item.attendance === "hadir"
-  ).length;
-
-  const notConfirmed = allRsvpData.filter(
-    item => item.attendance === "tidak"
-  ).length;
-
-  const totalPersons = allRsvpData.reduce(
-    (sum,item)=> sum + Number(item.guests || 1),
-    0
-  );
-
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-confirmed').textContent = confirmed;
-  document.getElementById('stat-not-confirmed').textContent = notConfirmed;
-  document.getElementById('stat-persons').textContent = totalPersons;
-
-  const confirmationRate = total > 0 
-      ? Math.round((confirmed / total) * 100)
-      : 0;
-
-  document.getElementById('progress-bar').style.width = confirmationRate + '%';
-  document.getElementById('progress-percent').textContent = confirmationRate;
-}
-      setInterval(loadRsvpData, 10000);
-     
+    
       // Update progress bar
       const confirmationRate = total > 0 ? Math.round((confirmed / total) * 100) : 0;
       document.getElementById('progress-bar').style.width = confirmationRate + '%';
