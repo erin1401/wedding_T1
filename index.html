@@ -868,39 +868,7 @@
     }
 
     // RSVP form submission
-    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      if (isSubmitting) return;
-      isSubmitting = true;
-      
-      const nameInput = document.getElementById('rsvp-name');
-      const attendanceInput = document.querySelector('input[name="attendance"]:checked');
-      const guestsInput = document.getElementById('rsvp-guests');
-      const messageInput = document.getElementById('rsvp-message');
-      
-      // Validation
-      if (!nameInput.value.trim() || !attendanceInput) {
-        alert('Mohon isi nama dan konfirmasi kehadiran');
-        isSubmitting = false;
-        return;
-      }
-      
-      const rsvpData = {
-        name: nameInput.value.trim(),
-        attendance: attendanceInput.value,
-        guests: guestsInput.value,
-        message: messageInput.value.trim(),
-        submitted_at: new Date().toISOString()
-      };
-      
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Mengirim...';
-      submitBtn.disabled = true;
-      
-     const result = await window.dataSdk.create(rsvpData);
-       
+     
      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0DpUY_gGtbJm4LXNmzDVRv1B9T8EIqMjXPpGN7VnIQNFq1Fyh_OoiC9NP-7Gbm8EB0w/exec";
 
 document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
@@ -959,14 +927,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   submitBtn.disabled = false;
 
 });;
-      
-      if (result.isOk) {
-        const form = document.getElementById('rsvpForm');
-        const success = document.getElementById('rsvpSuccess');
-        
-        form.classList.add('hidden');
-        success.classList.remove('hidden');
-        
+                 
         // Reset form after success
         form.reset();
         submitBtn.textContent = originalText;
