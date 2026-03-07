@@ -694,24 +694,7 @@
       primary_action_color: '#d4af37',
       secondary_action_color: '#f4d03f'
     };
-   // Google Sheet 
-let allRsvpData = [];
-
-async function loadRsvpData() {
-
-  const res = await fetch("https://script.google.com/macros/s/AKfycbyKeDlAdThNmz4m-c-xJQ7dzk4L2Q55J7VdvvOY2JP9yGaISaR5VYxhO2vRoRrQLcguuQ/exec");
-  
-  const data = await res.json();
-
-  allRsvpData = data;
-
-  updateStatistics();
-}
-
-loadRsvpData();
-
-    
-    // Data SDK Handler
+   // Data SDK Handler
     const dataHandler = {
       onDataChanged(data) {
         allRsvpData = data;
@@ -721,43 +704,22 @@ loadRsvpData();
 
     // Update Statistics
     function updateStatistics() {
-
-  const total = allRsvpData.length;
-
-  const confirmed = allRsvpData.filter(
-    item => item.attendance === "hadir"
-  ).length;
-
-  const notConfirmed = allRsvpData.filter(
-    item => item.attendance === "tidak"
-  ).length;
-
-  const totalPersons = allRsvpData.reduce(
-    (sum,item)=> sum + Number(item.guests || 1),
-    0
-  );
-
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-confirmed').textContent = confirmed;
-  document.getElementById('stat-not-confirmed').textContent = notConfirmed;
-  document.getElementById('stat-persons').textContent = totalPersons;
-
-  const confirmationRate = total > 0 
-      ? Math.round((confirmed / total) * 100)
-      : 0;
-
-  document.getElementById('progress-bar').style.width = confirmationRate + '%';
-  document.getElementById('progress-percent').textContent = confirmationRate;
-}
-      setInterval(loadRsvpData, 10000);
-   
+      const total = allRsvpData.length;
+      const confirmed = allRsvpData.filter(item => item.attendance === 'hadir').length;
+      const notConfirmed = allRsvpData.filter(item => item.attendance === 'tidak').length;
+      const totalPersons = allRsvpData.reduce((sum, item) => sum + parseInt(item.guests || 1), 0);
+      
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-confirmed').textContent = confirmed;
+      document.getElementById('stat-not-confirmed').textContent = notConfirmed;
+      document.getElementById('stat-persons').textContent = totalPersons;
+      
       // Update progress bar
       const confirmationRate = total > 0 ? Math.round((confirmed / total) * 100) : 0;
       document.getElementById('progress-bar').style.width = confirmationRate + '%';
       document.getElementById('progress-percent').textContent = confirmationRate;
     }
-
-    // Initialize Data SDK
+   // Initialize Data SDK
     async function initDataSDK() {
       if (window.dataSdk) {
         const result = await window.dataSdk.init(dataHandler);
