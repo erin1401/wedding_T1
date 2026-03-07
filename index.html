@@ -900,7 +900,13 @@
       submitBtn.textContent = 'Mengirim...';
       submitBtn.disabled = true;
       
-      const result = await window.dataSdk.create(rsvpData);
+      const result = await fetch ("https://script.google.com/macros/s/AKfycbxGpA-kTKMziLiM5kFvaVJbUx4qjyxjbqtQLMjPuXNbtGjnBDcqkSGffAWg8O8SR6R9kw/exec", {
+      method: "POST",
+      headers: {
+       "Content-Type": "application/json"
+      },
+     body: JSON.stringify(rsvpData)
+     });
       
       if (result.isOk) {
         const form = document.getElementById('rsvpForm');
