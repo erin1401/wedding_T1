@@ -599,6 +599,10 @@
     </footer>
    </div>
   </div>
+  <!-- AUDIO MUSIK -->
+<audio id="bgMusic" loop>
+  <source src="musik.mp3" type="audio/mp3">
+</audio>
   <script>
    // Data management
     let allRsvpData = [];
@@ -744,6 +748,12 @@
       
       cover.style.display = 'none';
       mainContent.classList.remove('hidden');
+     
+      // PLAY MUSIC
+  const music = document.getElementById("bgMusic");
+  music.play().catch(() => {});
+
+}
       
       // Trigger animations for visible elements
       setTimeout(() => {
